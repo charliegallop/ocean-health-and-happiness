@@ -12,10 +12,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+rootDir = "/home/charlie/Documents/Uni/Exeter - Data Science/MTHM601_Fundamentals_of_Applied_Data_Science/assignmentProjectv2"
+rawDataDir = "/home/charlie/Documents/Uni/Exeter - Data Science/MTHM601_Fundamentals_of_Applied_Data_Science/assignmentProjectv2/data/rawData"
 years = [2015, 2016, 2017, 2018, 2019]
 
 
-rawData = pd.read_csv("/home/charlie/Documents/Uni/Exeter - Data Science/MTHM601_Fundamentals_of_Applied_Data_Science/assignmentProjectv2/data/rawData/scores.csv")
+rawData = pd.read_csv(f"{rawDataDir}/scores.csv")
 
 
 df1 = rawData[rawData['dimension'] == 'score']
@@ -28,7 +30,7 @@ ohiDf = ohiDf[(ohiDf['year'] <2020) &(ohiDf['year'] >2014)]
 columnsOrder = ['year', 'country', 'region', 'rank', 'score', 'gdpPerCap', 'family', 'lifeExpectancy', 'freedom', 'trust', 'generosity']
 
 def tidyData(year):
-    rawData = pd.read_csv(f"/home/charlie/Documents/Uni/Exeter - Data Science/MTHM601_Fundamentals_of_Applied_Data_Science/assignmentProjectv2/data/rawData/happiness/{year}.csv")
+    rawData = pd.read_csv(f"{rawDataDir}/{year}.csv")
     df = rawData.copy()
     df['year'] = year 
     
@@ -85,15 +87,7 @@ for count, item in enumerate(hapDfs):
         hapMerged = hapMerged.append(item)
 
 combDf = ohiDf.merge(hapMerged, how = "inner", on = ['year', 'country'])
-
-#x = combDf['Sense of place']
-y = combDf['score']
-sns.lmplot(data = combDf, x = 'Index', y = 'score', hue = 'year')
-
-#makeMergedCSV(years, '/home/charlie/Documents/Uni/Exeter - Data Science/MTHM601_Fundamentals_of_Applied_Data_Science/assignmentProjectv2/data/rawData', 'happMerged')
-
-#hapMerged = pd.read_csv("/home/charlie/Documents/Uni/Exeter - Data Science/MTHM601_Fundamentals_of_Applied_Data_Science/assignmentProjectv2/data/rawData/happMerged.csv")
-#combDf = ohiDf.merge(hapMerged, how = "inner", on = ['year', 'country'])
+combDf.to_csv(f"{rootDir}/data/cleanData/cleanedData.csv", index = False)
 
 
 
