@@ -6,13 +6,18 @@ Created on Tue Jan 12 20:07:40 2022
 @author: charlie
 """
 
+# %%
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.formula.api import ols
 
+# %%
+
 data = pd.read_csv("/home/charlie/Documents/Uni/Exeter - Data Science/MTHM601_Fundamentals_of_Applied_Data_Science/assignmentProjectv2/data/cleanData/cleanedData.csv")
 data2019 = data[data['year'] == 2019]
+
+#%%
 
 # sns.set_style("white")
 # sns.set_palette("mako")
