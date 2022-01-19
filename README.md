@@ -6,8 +6,17 @@ Data used for analysis:
   
   
 # ToDo
-  
-- [ ] Impute missing data using different estimator methods
+
+- [ ] Consider bringing other varibales into data from UN or WHO website (things like fish production (reliance on ocean) etc) 
 - [ ] Check to see which method is the best fit for the data
-- [ ] Build model
-- [ ] Consider bringing other varibales into data from UN or WHO website (things like fish production (reliance on ocean) etc)
+- [X] Impute missing data using different estimator methods
+- [X] Build model
+
+	## Write up
+	
+- [ ] Add world maps for OHI and world happiness
+- [ ] Include scatter plots of variables used in model and happinessScore
+- [ ] Perform heirarchical modelling by region. Start with fixed effects model and follow the R tutorial from vle
+- [ ] 
+
+
