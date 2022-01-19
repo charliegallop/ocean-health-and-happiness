@@ -23,6 +23,7 @@ from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import cross_val_score
+from sklearn.impute import KNNImputer
 
 #%%
 
@@ -213,6 +214,8 @@ regionDf = regionDf.drop_duplicates(subset=['country'])
 
 for item in [2, 3, 4]:
     allYearsWHR[item] = allYearsWHR[item].merge(regionDf, how = "left", on = 'country')
+    
+
 
 # Check for missing regions
 # missingRegions = []
@@ -231,6 +234,8 @@ for count, item in enumerate(allYearsWHR):
     else:
         mergedWHR = mergedWHR.append(item)
         
+mergedWHR['region'].replace("Sub-Sahara Africa", "Sub-Saharan Africa", regex = True, inplace = True)
+        
 # %%
 
 # Merge the WHR dataset witht the OHI dataset on country and year, keeping
@@ -238,27 +243,62 @@ for count, item in enumerate(allYearsWHR):
 # countries were assessed in the OHI data
 
 combDf = cleanOHI.merge(mergedWHR, how = "inner", on = ['year', 'country'])
-combDf.to_csv(f"{rootDir}/data/cleanData/cleanedData.csv", index = False)
 
+combDf = combDf[['year',
+            'country',
+            'region',
+            'index',
+            'artisnalOpp',
+            'biodiversity',
+            'carbonStorage',
+            'senseOfPlace',
+            'cleanWater',
+            'coastalProt',
+            'economies',
+            'foodProv',
+            'livelihoods',
+            'livelihoodsAndEconomics',
+            'natProducts',
+            'tourismAndRec',
+            'subFisheries',
+            'subHabitat',
+            'subIconicSp',
+            'subLastingSpecialPlaces',
+            'subMariculture',
+            'subSpCondition',
+            'score']]
+combDf.rename(columns = {'score': 'happinessScore'}, inplace = True)
+
+combDf.to_csv(f"{rootDir}/data/cleanData/cleanedData.csv", index = False)
+nullDf = combDf[combDf.isnull().any(axis = 1)]
 # %%
 
-# Imputing missing data #1
+# Imputing missing data using iterative imputer
 
-df = combDf.iloc[:,2:]
+df = combDf.drop(columns = ['country', 'region'])
 df.drop('region', axis = 1, inplace = True)
-imputer = IterativeImputer(estimator = KNeighborsRegressor(), random_state = 42)
-imputed = imputer.fit_transform(df)
-df_imputed = pd.DataFrame(imputed, columns = df.columns)
+imputeIt = IterativeImputer()
+imputedIt = imputeIt.fit_transform(df)
+dfImputedIt = pd.DataFrame(imputedIt, columns = df.columns)
 
 # %%
 
 # Imputing missing data #2
-df = combDf.iloc[:,2:]
-df.drop('region', axis = 1, inplace = True)
+df = combDf.drop(columns = ['country', 'region'], axis = 1)
 
-imputer = IterativeImputer(n_nearest_features=None, imputation_order='ascending')
-imputer.fit(df)
-Xtrans = imputer.transform(df)
+imputeKNN = KNNImputer(n_neighbors = 2)
+imputedKNN = imputeKNN.fit_transform(df)
+
+dfImp = pd.DataFrame(imputedKNN, columns = ['year','index', 'artisnalOpp', 'biodiversity',
+       'carbonStorage', 'senseOfPlace', 'cleanWater', 'coastalProt',
+       'economies', 'foodProv', 'livelihoods', 'livelihoodsAndEconomics',
+       'natProducts', 'tourismAndRec', 'subFisheries', 'subHabitat',
+       'subIconicSp', 'subLastingSpecialPlaces', 'subMariculture',
+       'subSpCondition', 'happinessScore'])
+
+dfImp.insert(loc = 1, column = 'country', value = combDf['country'])
+dfImp.insert(loc = 2, column = 'region', value = combDf['region'])
+dfImp.to_csv(f"{rootDir}/data/cleanData/cleanedDataImp.csv", index = False)
 
 
 
