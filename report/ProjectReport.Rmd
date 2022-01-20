@@ -68,7 +68,7 @@ To make the world map in Figure \@ref(fig:WHRMap) the shape files of the OHI dat
 Missing data was imputed using the `sklearn` package in Python. Two algorithms were used to impute the missing data: K-nearest-neighbour (KNN) and IterativeImputer. Both of the algorithms used are multivariate imputation methods as this gives a more precise estimation than linear imputation \cite{htoon_guide_2020}. The KNN algorithm was the chosen method used to impute the missing data since it impute the missing values based on related observations \cite{beretta_nearest_2016}. A hyper-parameter of 2 was chosen for the number of neighbors as this estimated the missing values while preserving the distribution of the data. 
 
 ```{r WHRMap, echo=FALSE, fig.align='center', out.width='100%', fig.cap='The happiness score for each country and the ocean health index for the connected exclusive economic zone (EEZ) for that country. Darker colours represent higher scores and lighter colours represent lower scores. While the ocean health index score was not used in the analysis this gives an initial overview of the health of each countries ocean'}
-knitr::include_graphics("figures/happinessVOceanHealthMAP.jpg")
+knitr::include_graphics("figures/happinessVOceanHealthMAP2.jpg")
 ```
 
 # Analysis and Results
