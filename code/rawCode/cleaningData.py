@@ -270,6 +270,8 @@ combDf = combDf[['year',
 combDf.rename(columns = {'score': 'happinessScore'}, inplace = True)
 
 combDf.to_csv(f"{rootDir}/data/cleanData/cleanedData.csv", index = False)
+
+# Identify any missing data
 nullDf = combDf[combDf.isnull().any(axis = 1)]
 # %%
 
@@ -283,7 +285,7 @@ dfImputedIt = pd.DataFrame(imputedIt, columns = df.columns)
 
 # %%
 
-# Imputing missing data #2
+# Imputing missing data using KNN
 df = combDf.drop(columns = ['country', 'region'], axis = 1)
 
 imputeKNN = KNNImputer(n_neighbors = 2)
