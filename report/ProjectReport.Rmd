@@ -9,7 +9,6 @@ output:
 header-includes:
   - \usepackage{setspace}
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, fig.cap = TRUE)
 library(ggplot2)
@@ -95,7 +94,7 @@ summary <- df %>%
 kable(summary, caption = "Mean ocean health index and happiness score for each region")
 ```
 
-## Statistcal modelling
+## Statistical modelling
 
 From the visual analysis there seems to be some relationship between the health score variable and the ocean health index. To dig into this further, statistical modelling was used to investigate whether this relationship was significant and what variables influence this relationship. To identify any correlations between the goals in the OHI data and the happiness score, a correlation matrix was produced (Figure \@ref(fig:corrMatrix)). The features that had the highest correlation with the happiness score (`senseOfPlace`, `cleanWater`, `foodProv`, `tourismAndRec`) were then selected for modelling.
 

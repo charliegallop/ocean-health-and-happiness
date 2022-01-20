@@ -13,30 +13,6 @@ lm1 <- lm(happinessScore ~ cleanWater, data = df) #+ cleanWater + tourismAndRec,
 lm2 <- lm(happinessScore ~ cleanWater * senseOfPlace, data = df)
 lm3 <- lm(happinessScore ~ senseOfPlace + cleanWater + tourismAndRec + artisnalOpp + biodiversity + foodProv + natProducts, data = df)
 lm4 <- lm(happinessScore ~ senseOfPlace + cleanWater + tourismAndRec + foodProv, data = df)
-lmer1 <- lmer(happinessScore ~ senseOfPlace + cleanWater + tourismAndRec + (1|region), data = df)
-lmer2 <- lmer(happinessScore ~ senseOfPlace + cleanWater + tourismAndRec + artisnalOpp + biodiversity + foodProv + natProducts + (1|region), data = df)
-
-summary(lm1)
-summary(lm2)
-summary(lm3)
-
-
-lm1 %>% se.coef() %>% round(5)
-lmer1 %>% se.coef() %>% extract2(1) %>% round(5)
-
-performance::icc(lmer1)
-
-lmer1vc <- VarCorr(lmer1)
-print(lmer1vc, comp = "Variance")
-
-
-lmerdiag <- data.frame(Residuals = resid(lmer1),
-                          region = df$region,
-                          Fitted = fitted(lmer1))
-ggplot(data = lmerdiag, aes(x = Fitted, y = Residuals, col = region)) +
-  geom_point() +
-  facet_wrap(~region) +
-  ggtitle("Lowest level residuals facetting by region")
 
 plot_model(lmer1, type = "re")
 
@@ -64,3 +40,22 @@ summary(lmer3)
 
 lmer4 <- lmer(happinessScore ~ senseOfPlace + cleanWater + artisnalOpp + foodProv + (1|region), data = df)
 summary(lmer4)
+
+
+
+lm4 %>% se.coef() %>% round(5)
+lmer4 %>% se.coef() %>% extract2(1) %>% round(5)
+
+performance::icc(lmer4)
+
+lmer1vc <- VarCorr(lmer4)
+print(lmer4vc, comp = "Variance")
+
+
+lmerdiag <- data.frame(Residuals = resid(lmer4),
+                       region = df$region,
+                       Fitted = fitted(lmer4))
+ggplot(data = lmerdiag, aes(x = Fitted, y = Residuals, col = region)) +
+  geom_point() +
+  facet_wrap(~region) +
+  ggtitle("Lowest level residuals facetting by region")
