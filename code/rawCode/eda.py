@@ -99,22 +99,45 @@ table = world.merge(modData, how="left", left_on=['name'], right_on=['countryMap
 table2 = table.dropna()
 forExport = table2.drop('geometry', axis = 1)
 forExport.to_csv("/home/charlie/Documents/Uni/Exeter - Data Science/MTHM601_Fundamentals_of_Applied_Data_Science/assignmentProjectv2/data/cleanData/finalTable.csv")
+
+#%%
+df = forExport[[
+  'artisnalOpp',
+  'biodiversity',
+  'carbonStorage',
+  'senseOfPlace',
+  'cleanWater',
+  'coastalProt',
+  'economies',
+  'foodProv',
+  'livelihoods',
+  'livelihoodsAndEconomics',
+  'natProducts',
+  'tourismAndRec','happinessScore']]
+matrix = df.corr().round(2)
+sns.heatmap(matrix, annot=True)
+plt.savefig("/home/charlie/Documents/Uni/Exeter - Data Science/MTHM601_Fundamentals_of_Applied_Data_Science/assignmentProjectv2/results/plots/Figure 2022-01-18 122732.png")
+
 #%%
 sns.pairplot(data,vars = ['senseOfPlace', 'cleanWater', 'tourismAndRec', 'happinessScore', 'coastalProt'], kind='reg')
 # %%
 
 # sns.lmplot(data = table2, x = 'cleanWater', y = 'happinessScore', col = 'year', hue = 'year', col_wrap = 3)
 
-model1 = ols("happinessScore ~ senseOfPlace", data = table2).fit()
+model1 = ols("happinessScore ~ cleanWater", data = table2).fit()
 model2 = ols("happinessScore ~ senseOfPlace + cleanWater + tourismAndRec + artisnalOpp + biodiversity + foodProv + natProducts", data = table2).fit()
+model3 = ols("happinessScore ~ cleanWater + cleanWater * senseOfPlace", data = table2).fit()
+model4 = ols("happinessScore ~ (cleanWater * senseOfPlace) + tourismAndRec + foodProv", data = table2).fit()
 
 # plt.hist(model.resid)
 print(model1.summary())
 print(model2.summary())
+print(model3.summary())
+print(model4.summary())
 
-plt.clf()
-sns.histplot(model1.resid)
-plt.show()
+# plt.clf()
+# sns.histplot(model1.resid)
+# plt.show()
 
 # %%
 
